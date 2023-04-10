@@ -66,7 +66,7 @@ PROGRAMAS.
 # ---------------------- PROPOSTA DO PROJETO ----------------------
 # -----------------------------------------------------------------
     O projeto foi criado com o intuito de organizar horarios em dias de semana de segunda a sábado.
-    Após inicar o projeto com a seguinte imagem:
+    Após inicar o projeto com a seguinte imagem: https://postlmg.cc/DSxnwNjK
 
 
 
@@ -79,22 +79,7 @@ PROGRAMAS.
         FIXME: $$$ ARRUMAR URGENTEMENTE $$$:
 
             DUAS TABELAS ESTÃO COM A TIPAGEM ERRADA:
-
-                # $TABELA SEGUNDA FEIRA
-                # conn.execute('''CREATE TABLE SEGUNDA
-                #            (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                #            HORARIO1 INT NOT NULL,
-                #            MATERIA1 TEXT NOT NULL,
-                #            HORARIO2 INT NOT NULL,
-                #            MATERIA2 INT NOT NULL);''')
-
-                # $TABELA TERCA FEIRA
-                # conn.execute(''' CREATE TABLE TERCA
-                #            ( id INTEGER PRIMARY KEY AUTOINCREMENT,
-                #            HORARIO1 INT NOT NULL,
-                #            MATERIA1 TEXT NOT NULL,
-                #            HORARIO2 INT NOT NULL,
-                #            MATERIA2 INT NOT NULL);''')
+                Fixed. 10/04/23
 
 
 
@@ -278,10 +263,10 @@ def verSEG():
 
 def verTER():
     try:
-        connverter = sqlite3.connect('AGENDA.db')
+        connverterc = sqlite3.connect('AGENDA.db')
 
         # Criar um cursor
-        cur = connverter.cursor()
+        cur = connverterc.cursor()
 
         # Executar o SELECT
         cur.execute("SELECT * FROM TERCA")
@@ -295,10 +280,13 @@ def verTER():
 
         # Fechar o cursor e a conexão
         cur.close()
-        connverter.close()
-        return "Operação bem sucedida."
-    except sqlite3.OperationalError as e:
-        return f"Operação não sucedida. Erro: {str(e)}"
+        connverterc.close()
+
+        # Retornar mensagem de sucesso
+        return "Operação ver Segunda-Feira bem-sucedida"
+    except Exception as e:
+        # Retornar mensagem de erro
+        return "Operação ver Segunda-Feira não-sucedida. Erro: {}".format(e)
 
 
 def verQUA():
@@ -426,20 +414,14 @@ def updateTER():
         connter = sqlite3.connect('AGENDA.db')
         cursor = connter.cursor()
 
-        # Solicita o novo valor para a coluna "MATERIA1"
-        nv_m1 = input("Digite o novo valor para MATERIA1: ")
-        # Solicita o novo valor para a coluna "HORARIO1"
-        nv_h1 = input("Digite o novo valor para HORARIO1")
-        # Solicita o novo valor para a coluna "MATERIA2"
-        nv_m2 = input("Digite o novo valor para MATERIA2: ")
-        # Solicita o novo valor para a coluna "HORARIO2"
-        nv_h2 = input("Digite o novo valor para HORARIO2")
+        nv_m1, nv_h1, nv_m2, nv_h2 = input("Digite o novo valor para {}: ".format("MATERIA1")), input(
+            "Digite o novo valor para {}: ".format("HORARIO1")), input(
+            "Digite o novo valor para {}: ".format("MATERIA2")), input(
+            "Digite o novo valor para {}: ".format("HORARIO2"))
 
-        # Atualiza as colunas de todos os registros da tabela "TERCA"
-        cursor.execute("UPDATE TERCA SET MATERIA1 = ? ", (nv_m1,))
-        cursor.execute("UPDATE TERCA SET HORAIO1 = ? ", (nv_h1,))
-        cursor.execute("UPDATE TERCA SET MATERIA2 = ? ", (nv_m2,))
-        cursor.execute("UPDATE TERCA SET HORARIO2 = ? ", (nv_h2,))
+        # Atualiza a tabela terca feira
+        cursor.execute("UPDATE SEGUNDA SET MATERIA1 = ?, MATERIA2 = ?, MATERIA3 = ?, MATERIA4 = ?",
+                       (nv_m1, nv_h1, nv_m2, nv_h2))
 
         # Salva as alterações
         connter.commit()
@@ -458,20 +440,14 @@ def updateQUA():
         connqua = sqlite3.connect('AGENDA.db')
         cursor = connqua.cursor()
 
-        # Solicita o novo valor para a coluna "MATERIA1"
-        nv_m1 = input("Digite o novo valor para MATERIA1: ")
-        # Solicita o novo valor para a coluna "HORARIO1"
-        nv_h1 = input("Digite o novo valor para HORARIO1")
-        # Solicita o novo valor para a coluna "MATERIA2"
-        nv_m2 = input("Digite o novo valor para MATERIA2: ")
-        # Solicita o novo valor para a coluna "HORARIO2"
-        nv_h2 = input("Digite o novo valor para HORARIO2")
+        nv_m1, nv_h1, nv_m2, nv_h2 = input("Digite o novo valor para {}: ".format("MATERIA1")), input(
+            "Digite o novo valor para {}: ".format("HORARIO1")), input(
+            "Digite o novo valor para {}: ".format("MATERIA2")), input(
+            "Digite o novo valor para {}: ".format("HORARIO2"))
 
-        # Atualiza as colunas de todos os registros da tabela "QUARTA"
-        cursor.execute("UPDATE QUARTA SET MATERIA1 = ? ", (nv_m1,))
-        cursor.execute("UPDATE QUARTA SET HORARIO1 = ? ", (nv_h1,))
-        cursor.execute("UPDATE QUARTA SET MATERIA2 = ? ", (nv_m2,))
-        cursor.execute("UPDATE QUARTA SET HORARIO2 = ? ", (nv_h2,))
+        # Atualiza a tabela quarta feira
+        cursor.execute("UPDATE SEGUNDA SET MATERIA1 = ?, MATERIA2 = ?, MATERIA3 = ?, MATERIA4 = ?",
+                       (nv_m1, nv_h1, nv_m2, nv_h2))
 
         # Salva as alterações
         connqua.commit()
@@ -488,20 +464,14 @@ def updateQUI():
         connqui = sqlite3.connect('AGENDA.db')
         cursor = connqui.cursor()
 
-        # Solicita o novo valor para a coluna "MATERIA1"
-        nv_m1 = input("Digite o novo valor para MATERIA1: ")
-        # Solicita o novo valor para a coluna "HORARIO1"
-        nv_h1 = input("Digite o novo valor para HORARIO1")
-        # Solicita o novo valor para a coluna "MATERIA2"
-        nv_m2 = input("Digite o novo valor para MATERIA2: ")
-        # Solicita o novo valor para a coluna "HORARIO2"
-        nv_h2 = input("Digite o novo valor para HORARIO2")
+        nv_m1, nv_h1, nv_m2, nv_h2 = input("Digite o novo valor para {}: ".format("MATERIA1")), input(
+            "Digite o novo valor para {}: ".format("HORARIO1")), input(
+            "Digite o novo valor para {}: ".format("MATERIA2")), input(
+            "Digite o novo valor para {}: ".format("HORARIO2"))
 
-        # Atualiza as colunas de todos os registros da tabela "QUARTA"
-        cursor.execute("UPDATE QUARTA SET MATERIA1 = ? ", (nv_m1,))
-        cursor.execute("UPDATE QUARTA SET HORARIO1 = ? ", (nv_h1,))
-        cursor.execute("UPDATE QUARTA SET MATERIA2 = ? ", (nv_m2,))
-        cursor.execute("UPDATE QUARTA SET HORARIO2 = ? ", (nv_h2,))
+        # Atualiza a tabela quinta feira
+        cursor.execute("UPDATE SEGUNDA SET MATERIA1 = ?, MATERIA2 = ?, MATERIA3 = ?, MATERIA4 = ?",
+                       (nv_m1, nv_h1, nv_m2, nv_h2))
 
         # Salva as alterações
         connqui.commit()
@@ -518,20 +488,14 @@ def updateSEX():
         connsex = sqlite3.connect('AGENDA.db')
         cursor = connsex.cursor()
 
-        # Solicita o novo valor para a coluna "MATERIA1"
-        nv_m1 = input("Digite o novo valor para MATERIA1: ")
-        # Solicita o novo valor para a coluna "HORARIO1"
-        nv_h1 = input("Digite o novo valor para HORARIO1")
-        # Solicita o novo valor para a coluna "MATERIA2"
-        nv_m2 = input("Digite o novo valor para MATERIA2: ")
-        # Solicita o novo valor para a coluna "HORARIO2"
-        nv_h2 = input("Digite o novo valor para HORARIO2")
+        nv_m1, nv_h1, nv_m2, nv_h2 = input("Digite o novo valor para {}: ".format("MATERIA1")), input(
+            "Digite o novo valor para {}: ".format("HORARIO1")), input(
+            "Digite o novo valor para {}: ".format("MATERIA2")), input(
+            "Digite o novo valor para {}: ".format("HORARIO2"))
 
-        # Atualiza as colunas de todos os registros da tabela "SEXTA"
-        cursor.execute("UPDATE QUARTA SET MATERIA1 = ? ", (nv_m1,))
-        cursor.execute("UPDATE QUARTA SET HORARIO1 = ? ", (nv_h1,))
-        cursor.execute("UPDATE QUARTA SET MATERIA2 = ? ", (nv_m2,))
-        cursor.execute("UPDATE QUARTA SET HORARIO2 = ? ", (nv_h2,))
+        # Atualiza a tabela sexta feira
+        cursor.execute("UPDATE SEGUNDA SET MATERIA1 = ?, MATERIA2 = ?, MATERIA3 = ?, MATERIA4 = ?",
+                       (nv_m1, nv_h1, nv_m2, nv_h2))
 
         # Salva as alterações
         connsex.commit()
@@ -548,17 +512,14 @@ def updateSAB():
         connsab = sqlite3.connect('AGENDA.db')
         cursor = connsab.cursor()
 
-        # Solicita o novo valor para a coluna "MATERIA1"
-        nv_m1 = input("Digite o novo valor para MATERIA1: ")
-        nv_h1 = input("Digite o novo valor para HORARIO1")
-        nv_m2 = input("Digite o novo valor para MATERIA2: ")
-        nv_h2 = input("Digite o novo valor para HORARIO2")
+        nv_m1, nv_h1, nv_m2, nv_h2 = input("Digite o novo valor para {}: ".format("MATERIA1")), input(
+            "Digite o novo valor para {}: ".format("HORARIO1")), input(
+            "Digite o novo valor para {}: ".format("MATERIA2")), input(
+            "Digite o novo valor para {}: ".format("HORARIO2"))
 
-        # Atualiza a coluna "MATERIA1" de todos os registros da tabela "SABADO"
-        cursor.execute("UPDATE SABADO SET MATERIA1 = ? ", (nv_m1,))
-        cursor.execute("UPDATE SABADO SET HORARIO1 = ? ", (nv_h1,))
-        cursor.execute("UPDATE SABADO SET MATERIA1 = ? ", (nv_m2,))
-        cursor.execute("UPDATE SABADO SET HORARIO2 = ? ", (nv_h2,))
+        # Atualiza a tabela sabado
+        cursor.execute("UPDATE SEGUNDA SET MATERIA1 = ?, MATERIA2 = ?, MATERIA3 = ?, MATERIA4 = ?",
+                       (nv_m1, nv_h1, nv_m2, nv_h2))
 
         # Salva as alterações
         connsab.commit()
@@ -766,13 +727,13 @@ def apagar_tabela():
 def decisao_sair():
     try:
         print("\t:::DESEJA VOLTAR AO MENU PRINCIPAL? S OU N::::")
-        voltar = str(input("$DIGITE A OPÇÃO DESEJADA$"))
+        voltar = str(input("$DIGITE A OPÇÃO DESEJADA$\n---"))
         if voltar.lower() == 's' or voltar.lower() == 'sim':
             menu_principal()
         elif voltar.lower() == 'n' or voltar.lower() == 'nao':
             try:
                 print("@@==$OPERAÇÃO FINALIZADA COM SUCESSO$==@@")
-                sair = input("DESEJA SAIR DO SISTEMA?")
+                sair = input("DESEJA SAIR DO SISTEMA?\n---")
                 if sair.lower() == 's' or sair.lower() == 'sim':
                     exit()
                 elif sair.lower() == 'n' or sair.lower() == 'nao':
@@ -799,7 +760,7 @@ def adicionar_nota():
     # Criando uma tabela para notas se ela ainda não existir
     conn = sqlite3.connect("AGENDA.DB")
 
-    nome_da_nota = str(input("INFORME O NOME DA NOTA"))
+    nome_da_nota = str(input("INFORME O NOME DA NOTA\n---"))
 
     sql_query = f'''CREATE TABLE IF NOT EXISTS {nome_da_nota}                 
                    (id INTEGER PRIMARY KEY AUTOINCREMENT,             
@@ -818,6 +779,33 @@ def adicionar_nota():
 
     print("Coluna NOTA_ID adicionada com sucesso à tabela ", tabela)
 
+
+# -------------------------------------------------------------------
+# MODIFICAR O TIPO DE UMA COLUNA ------------------------------------
+# -------------------------------------------------------------------
+
+
+def alterar_tipo_coluna():
+    # Conecta-se ao banco de dados
+    conexao = sqlite3.connect('AGENDA.db')
+
+    # Cria um cursor para executar comandos SQL
+    cursor = conexao.cursor()
+
+    # Recebe os valores de entrada do usuário
+    nome_tabela = input("\t@@@DIGITE O NOME DA TABELA@@@:\n--- ")
+    nome_coluna = input("\t@@@DIGITE O NOME DA COLUNA A SER MODIFICADA@@@:\n--- ")
+    novo_tipo = input("\t@@@DIGITE O TIPO QUE DESEJA ATRIBUIR A COLUNA SELECIONADA:@@@@\n--- ")
+
+    # Executa o comando SQL para modificar o tipo de uma coluna na tabela especificada
+    comando_sql = f"ALTER TABLE {nome_tabela} MODIFY COLUMN {nome_coluna} {novo_tipo};"
+    cursor.execute(comando_sql)
+
+    # Salva as alterações no banco de dados
+    conexao.commit()
+
+    # Fecha a conexão com o banco de dados
+    conexao.close()
 
 # ----------------------------------------------------------------------
 # --------------------------- MENU PRINCIPAL ---------------------------
@@ -838,9 +826,10 @@ def menu_principal():
     print("\t\t\t@@@==== 5 - REMOVER COLUNAS ===========@@@")
     print("\t\t\t@@@==== 6-  ADICIONAR TABELAS =========@@@")
     print("\t\t\t@@@==== 7-  APAGAR TABELAS ============@@@")
-    print("\t\t\t@@@==== 8-  ADICIONAR NOTAS ===========@@@")
+    print("\t\t\t@@@==== 8-  MODIFICAR TIPO DA COLUNA ==@@@")
+    print("\t\t\t@@@==== 9-  ADICIONAR NOTAS ===========@@@")
 
-    decisao = int(input("Oque deseja fazer?"))
+    decisao = int(input("Oque deseja fazer?\n---"))
 
     # VER AGENDA
     if decisao == 1:
@@ -851,14 +840,15 @@ def menu_principal():
         print("\t\t$ digite sexta para sexta feira                  $")
         print("\t\t$ digite sabado para sabado                      $")
         print("\t\t$ digite outra tabela para acessar outra tabela  $")
-        entrada = input('\t::-  DIGITE O DIA DA SEMANA QUE VOCÊ DESEJA VER  -::')
+        entrada = input('\t::-  DIGITE O DIA DA SEMANA QUE VOCÊ DESEJA VER  -::\n---')
         while entrada != "exit":
 
             if entrada.lower() == 'segunda':
-                print(verSEG())
+                print('\nSUA AGENDA DE SEGUNDA FEIRA É:\n')
+                print(verSEG() + "\n")
                 decisao_sair()
-            elif entrada.lower() == 'terça':
-                print(verTER())
+            elif entrada.lower() == 'terca':
+                print(verTER() + "\n")
                 decisao_sair()
             elif entrada.lower() == "quarta":
                 print(verQUA())
@@ -873,7 +863,7 @@ def menu_principal():
                 print(verSAB())
                 decisao_sair()
             elif entrada == "exit":
-                print("OBRIGADO POR USAR O SISTEMA DE GERENCIAMENTO DE AGENDA.")
+                print("@@OBRIGADO POR USAR O SISTEMA DE GERENCIAMENTO DE AGENDA.@@")
                 break
             # FIXME: PENSAR NA PROPOSTA DE INFORMAR A TABELA A SER ACESSADA
             # elif entrada == 'outra tabela':
@@ -884,7 +874,7 @@ def menu_principal():
 
     # MODIFICAR AGENDA- MODIFICAR POR INTEIRA
     elif decisao == 2:
-        decisao_MOD = input("INFORME O DIA DA SEMANA PARA ALTERAR")
+        decisao_MOD = input("@@=INFORME O DIA DA SEMANA PARA ALTERAR=@@")
         while decisao_MOD != "exit":
             if decisao_MOD.lower() == 'segunda':
                 updateSEG()
@@ -905,15 +895,15 @@ def menu_principal():
                 updateSAB()
                 decisao_sair()
             elif decisao_MOD == 'exit':
-                print("OBRIGADO POR USAR O SISTEMA DE GERENCIAMENTO DE AGENDA, FINALIZANDO...")
+                print("@@OBRIGADO POR USAR O SISTEMA DE GERENCIAMENTO DE AGENDA, FINALIZANDO@@")
                 break
             else:
-                raise Exception("ENTRADA DE DADOS ERRADA, TERMINANDO A SESSÃO...")
+                raise Exception("@@@ENTRADA DE DADOS ERRADA, TERMINANDO A SESSÃO@@@")
 
     # APAGAR TODOS OS DADOS DA TABELA
     elif decisao == 3:
-        print("\tBEM VINDO, ESTA OPÇÃO IRÁ APAGAR A TABELA COMPLETAMENTE")
-        print("escreva o dia ou escreva -EXIT- para sair")
+        print("\t@@@BEM VINDO, ESTA OPÇÃO IRÁ APAGAR A TABELA COMPLETAMENTE@@@")
+        print("@escreva o dia ou escreva -EXIT- para sair@")
         decisao3 = input("INFORME -[]- ")
 
         while decisao3 != "EXIT":
@@ -935,33 +925,31 @@ def menu_principal():
             elif decisao3.lower() == "sabado":
                 deletSAB()
                 decisao_sair()
-            elif decisao3.lower() == "exit" or decisao3.lower() == "sair":
-                print("$$OBRIGADO POR USAR O SISTEMA DE GERENCIAMENTO DE AGENDA$$")
-                break
-            else:
-                raise Exception("@==DADOS INFORMADOS DE MANEIRA ERRADA==@")
-
-    # ADICIONAR ITENS NA TABELA
+            # ADICIONAR ITENS NA TABELA
     elif decisao == 4:
-        print("\t BEM VINDO, ESTA OPÇÃO IRÁ ADICIONAR ITENS A TABELA QUE DESEJA-")
+        print("\t@@@BEM VINDO, ESTA OPÇÃO IRÁ ADICIONAR ITENS A TABELA QUE DESEJA@@@")
         adicionarCol()
         decisao_sair()
     # REMOVER COLUNAS
     elif decisao == 5:
-        print("\t BEM VINDO, ESTA OPÇÃO IRÁ REMOVER COLUNAS DA SUA TABELA")
+        print("\t@@@BEM VINDO, ESTA OPÇÃO IRÁ REMOVER COLUNAS DA SUA TABELA@@@")
         apagar_coluna()
         decisao_sair()
     # ADICIONAR TABELA
     elif decisao == 6:
-        print("\t BEM VINDO, ESTA OPÇÃO IRÁ ADICIONAR UMA TABELA NOVA AO SEU BDD")
+        print("\t@@@BEM VINDO, ESTA OPÇÃO IRÁ ADICIONAR UMA TABELA NOVA AO SEU BDD@@@")
         add_tabble()
         decisao_sair()
     elif decisao == 7:
-        print("\t BEM VINDO, ESTA OPÇÃO IRÁ REMOVER A TABELA DESEJADA-")
+        print("\t@@@BEM VINDO, ESTA OPÇÃO IRÁ REMOVER A TABELA DESEJADA@@@")
         apagar_tabela()
         decisao_sair()
     elif decisao == 8:
-        print("\t BEM VINDO, ESTÁ OPÇÃO IRA ADICIONAR UMA NOTA")
+        print("@@@BEM VINDO, ESTA OPÇÃO IRÁ ALTERAR O TIPO DA SUA COLUNA DESEJADA@@@\n")
+        alterar_tipo_coluna()
+        decisao_sair()
+    elif decisao == 9:
+        print("\t@@@BEM VINDO, ESTÁ OPÇÃO IRA ADICIONAR UMA NOTA@@@")
         adicionar_nota()
         decisao_sair()
     else:
