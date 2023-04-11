@@ -77,9 +77,37 @@ PROGRAMAS.
     # FIXME: PROBLEMAS ATUAIS:
 
         FIXME: $$$ ARRUMAR URGENTEMENTE $$$:
+            --
+            NOTA ESTÁ REFERENCIANDO NOTA
+                fixed. 11/04/23
+                    IMPLEMENTED: mudança no código, criação de nota através de constraint's
+                                 Ao criar tabelas o usuario escolhe qual tabela referenciar a nota
+                                 SEGUNDA À SABADO
 
-            DUAS TABELAS ESTÃO COM A TIPAGEM ERRADA:
-                Fixed. 10/04/23
+
+            NOTA NÃO ESTÁ FUNCIONANDO A CRIAÇÃO--
+                fixed. 11/04/23
+            CRIAR TABELAS NÃO ESTÁ FUNCIONANDO--
+
+            QUANDO PUXO PARA VER A AGENDA NÃO RETORNA, E DÁ ERRO--
+                fixed. 07/04/23
+            DUAS TABELAS ESTÃO COM A TIPAGEM ERRADA--
+                fixed. 10/04/23
+            CODIGO DE MUDANÇA DE TIPO DA COLUNA GERANDO ERRO NA SINTAXE --(NEAR TO MODIFY)--
+
+            TABELA CRIAÇÃO DE NOTA FOI FEITA, MAS NÃO EXISTE A TABELA INSERÇÃO DE CONTEÚDO--
+
+                # fixme: Possível solução:
+                    a criação pode ser feita através de um menu de escolha depois de criar a tabela desejada
+                    ou através do laço de repetição
+
+
+
+
+# -----------------------------------------------------------------
+# ----------- RESPOSTA DO CHAT GPT EM RELAÇÃO AO CODIGO -----------
+# -----------------------------------------------------------------
+
 
 
 
@@ -108,7 +136,7 @@ PROGRAMAS.
         como o uso de nomes de variáveis descritivos e o comentário adequado do código.
         É importante seguir essas práticas para tornar o código mais legível e fácil de manter.
 
-    # FIXME: == AREA DE PROPOSTAS ==
+    # FIXME: == AREA DE PROPOSTAS DO CHAT GPT ==
 
         1.Use consultas preparadas ou escape as entradas do usuário ao criar consultas SQL.
         Isso ajudará a evitar ataques de injeção de SQL.
@@ -148,6 +176,27 @@ PROGRAMAS.
         5.Use uma conexão por solicitação e feche a conexão corretamente após cada solicitação.
 
 
+        6.Implementar no código uma api para envio de mensagem no what's
+
+        7.Pra isso funcioar precisamos instanciar o codigo dentro de um servidor (PODE SER tecnologia CONTAINER ou
+        DOCKER)
+
+        8.CRIAÇÃO DE NOTAS DE REFERENCIAS FIXAS ATRAVÉS DE WHILE LOOP
+            COMO SERÁ O FUNCIONAMENTO DISSO:
+                O CODIGO IRÁ PEDIR O NOME DA TABELA,
+
+                                create table table_name
+                (
+                    ID       integer not null
+                        constraint table_name_pk
+                            primary key autoincrement
+                        constraint table_name_SEGUNDA_id_fk
+                            references SEGUNDA,
+                    Titulo   text    not null,
+                    conteudo text    not null
+                );
+
+        9.CRIAÇÃO DE NOTA REFERENCIA SOMENTE TABELAS EXISTENTES- CRIAR CODIGO QUE REFERENCIE TABELAS N EXISTENTES
 
 
 
@@ -755,29 +804,172 @@ def decisao_sair():
 # NOTAS CRIAR, INSERIR E REFERENCIAR---------------------------------
 # -------------------------------------------------------------------
 
-# FIXME: REFENCIA ERRADA, A NOTA REFERENCIANDO NOTA, A NOTA DEVE REFERENCIAR UMA TABELA DIA DE SEMANA-------------
 def adicionar_nota():
-    # Criando uma tabela para notas se ela ainda não existir
-    conn = sqlite3.connect("AGENDA.DB")
+    try:
+        connNota = sqlite3.connect('AGENDA.DB')
+        cursor = connNota.cursor()
+        semana_dia = str(input("EM QUE DIA DA SEMANA SUA NOTA IRÁ APARECER?"))
+        if semana_dia == 'segunda':
+            try:
+                Nome_nota = input("INFORME O NOME DA NOTA...")
+                titulo = str(input("INFORME O TITULO DA NOTA"))
 
-    nome_da_nota = str(input("INFORME O NOME DA NOTA\n---"))
+                sql_query = f"               create table {Nome_nota}" \
+                            f"( ID  integer not null " \
+                            f"  constraint table_name_pk" \
+                            f"     primary key autoincrement" \
+                            f"   constraint table_SEGUNDA_id_fk" \
+                            f"   references SEGUNDA" \
+                            f" {titulo}   text  not null" \
+                            f" conteudo  text   not null"
 
-    sql_query = f'''CREATE TABLE IF NOT EXISTS {nome_da_nota}                 
-                   (id INTEGER PRIMARY KEY AUTOINCREMENT,             
-                   NOME TEXT NOT NULL,                                
-                   CONTEUDO TEXT NOT NULL);'''
+                cursor.execute(sql_query)
 
-    conn.execute(sql_query)
+                connNota.commit()
 
-    # Recebendo o nome da tabela por input
-    tabela = input('Digite o nome da tabela a ser alterada: ').upper()
+                connNota.close()
+                return "OPERAÇÃO BEM SUCEDIDA, TABELA ADICIONADA COM SUCESSO."
+            except sqlite3.OperationalError as e:
+                return f"Operação não sucedida. Erro: {str(e)}"
+        elif semana_dia.lower() == 'terca':
+            try:
+                Nome_nota = input("INFORME O NOME DA NOTA...")
+                titulo = str(input("INFORME O TITULO DA NOTA"))
 
-    # Adicionando a coluna NOTA_ID à tabela especificada
-    conn.execute(f'''ALTER TABLE {tabela}                             
-                    ADD COLUMN NOTA_ID INTEGER,                       
-                    FOREIGN KEY (NOTA_ID) REFERENCES NOTA(id));''')
+                sql_query = f"               create table {Nome_nota}" \
+                            f"( ID  integer not null " \
+                            f"  constraint table_name_pk" \
+                            f"     primary key autoincrement" \
+                            f"   constraint table_TERCA_id_fk" \
+                            f"   references TERCA" \
+                            f" {titulo}   text  not null" \
+                            f" conteudo  text   not null"
 
-    print("Coluna NOTA_ID adicionada com sucesso à tabela ", tabela)
+                cursor.execute(sql_query)
+
+                connNota.commit()
+
+                connNota.close()
+                return "OPERAÇÃO BEM SUCEDIDA, TABELA ADICIONADA COM SUCESSO."
+            except sqlite3.OperationalError as e:
+                return f"Operação não sucedida. Erro: {str(e)}"
+        elif semana_dia.lower() == 'quarta':
+            try:
+                Nome_nota = input("INFORME O NOME DA NOTA...")
+                titulo = str(input("INFORME O TITULO DA NOTA"))
+
+                sql_query = f"               create table {Nome_nota}" \
+                            f"( ID  integer not null " \
+                            f"  constraint table_name_pk" \
+                            f"     primary key autoincrement" \
+                            f"   constraint table_QUARTA_id_fk" \
+                            f"   references QUARTA" \
+                            f" {titulo}   text  not null" \
+                            f" conteudo  text   not null"
+
+                cursor.execute(sql_query)
+
+                connNota.commit()
+
+                connNota.close()
+                return "OPERAÇÃO BEM SUCEDIDA, TABELA ADICIONADA COM SUCESSO."
+            except sqlite3.OperationalError as e:
+                return f"Operação não sucedida. Erro: {str(e)}"
+        elif semana_dia.lower() == 'quinta':
+            try:
+                Nome_nota = input("INFORME O NOME DA NOTA...")
+                titulo = str(input("INFORME O TITULO DA NOTA"))
+
+                sql_query = f"               create table {Nome_nota}" \
+                            f"( ID  integer not null " \
+                            f"  constraint table_name_pk" \
+                            f"     primary key autoincrement" \
+                            f"   constraint table_QUINTA_id_fk" \
+                            f"   references QUINTA" \
+                            f" {titulo}   text  not null" \
+                            f" conteudo  text   not null"
+
+                cursor.execute(sql_query)
+
+                connNota.commit()
+
+                connNota.close()
+                return "OPERAÇÃO BEM SUCEDIDA, TABELA ADICIONADA COM SUCESSO."
+            except sqlite3.OperationalError as e:
+                return f"Operação não sucedida. Erro: {str(e)}"
+        elif semana_dia.lower() == 'sexta':
+            try:
+                Nome_nota = input("INFORME O NOME DA NOTA...")
+                titulo = str(input("INFORME O TITULO DA NOTA"))
+
+                sql_query = f"               create table {Nome_nota}" \
+                            f"( ID  integer not null " \
+                            f"  constraint table_name_pk" \
+                            f"     primary key autoincrement" \
+                            f"   constraint table_SEXTA_id_fk" \
+                            f"   references SEXTA" \
+                            f" {titulo}   text  not null" \
+                            f" conteudo  text   not null"
+
+                cursor.execute(sql_query)
+
+                connNota.commit()
+
+                connNota.close()
+                return "OPERAÇÃO BEM SUCEDIDA, TABELA ADICIONADA COM SUCESSO."
+            except sqlite3.OperationalError as e:
+                return f"Operação não sucedida. Erro: {str(e)}"
+        elif semana_dia.lower() == 'sabado':
+            try:
+                Nome_nota = input("INFORME O NOME DA NOTA...")
+                titulo = str(input("INFORME O TITULO DA NOTA"))
+
+                sql_query = f"               create table {Nome_nota}" \
+                            f"( ID  integer not null " \
+                            f"  constraint table_name_pk" \
+                            f"     primary key autoincrement" \
+                            f"   constraint table_SABADO_id_fk" \
+                            f"   references SABADO" \
+                            f" {titulo}   text  not null" \
+                            f" conteudo  text   not null"
+
+                cursor.execute(sql_query)
+
+                connNota.commit()
+
+                connNota.close()
+                return "OPERAÇÃO BEM SUCEDIDA, TABELA ADICIONADA COM SUCESSO."
+            except sqlite3.OperationalError as e:
+                return f"Operação não sucedida. Erro: {str(e)}"
+
+        return "OPERAÇÃO BEM SUCEDIDA, TABELA ADICIONADA COM SUCESSO."
+    except sqlite3.OperationalError as e:
+        return f"Operação não sucedida. Erro: {str(e)}"
+
+
+# -------------- ANTIGO CODIGO ------------------------------
+
+#   Criando uma tabela para notas se ela ainda não existir
+#    conn = sqlite3.connect("AGENDA.DB")
+#
+#    nome_da_nota = str(input("INFORME O NOME DA NOTA\n---"))
+#
+#    sql_query = f'''CREATE TABLE IF NOT EXISTS {nome_da_nota}
+#                   (id INTEGER PRIMARY KEY AUTOINCREMENT,
+#                   NOME TEXT NOT NULL,
+#                   CONTEUDO TEXT NOT NULL);'''
+#
+#    conn.execute(sql_query)
+#
+#    # Recebendo o nome da tabela por input
+#    tabela = input('Digite o nome da tabela a ser alterada: ').upper()
+#
+#    # Adicionando a coluna NOTA_ID à tabela especificada
+#    conn.execute(f'''ALTER TABLE {tabela}
+#                    ADD COLUMN NOTA_ID INTEGER,
+#                    FOREIGN KEY (NOTA_ID) REFERENCES NOTA(id));''')#
+#
+#    print("Coluna NOTA_ID adicionada com sucesso à tabela ", tabela)"""
 
 
 # -------------------------------------------------------------------
@@ -806,6 +998,7 @@ def alterar_tipo_coluna():
 
     # Fecha a conexão com o banco de dados
     conexao.close()
+
 
 # ----------------------------------------------------------------------
 # --------------------------- MENU PRINCIPAL ---------------------------
