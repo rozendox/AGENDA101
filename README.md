@@ -1,4 +1,20 @@
+<style>
+    .header h1{
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 10px;
+        }
 
+        .header h7{ 
+            margin-top: auto;
+            margin-left: auto;
+            margin-right: auto;
+            align-items: center;
+            padding: 18px;
+
+        }
+</style>
 <h1><center>AGENDA101</center></h1>
 </br>
 <div style="text-align: center;">
