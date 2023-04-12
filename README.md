@@ -1,19 +1,15 @@
-<div style="text-align: center;">
-    <h1 style="color: #ff00ff; animation: myAnimation 2s infinite;">
-        AGENDA101
-    </h1>
-</div>
+<pre>
+  ______           _       
+ / _____)         (_)      
+| /       ___  ____ _ ____  
+| |      / _ \|  _ | |  _ \
+| \_____| |_| | |_| | |_| |
+ \______)___/|  __/|  __/ 
+            |_|   |_|    
+</pre>
 
-<style>
-    @keyframes myAnimation {
-        0% {
-            transform: rotate(0deg);
-        }
-        100% {
-            transform: rotate(360deg);
-        }
-    }
-</style>
+
+
 
 </br>
 <div style="text-align: center;">
