@@ -1,21 +1,20 @@
+<div style="text-align: center;">
+    <h1 style="color: #ff00ff; animation: myAnimation 2s infinite;">
+        AGENDA101
+    </h1>
+</div>
+
 <style>
-    .header h1{
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 10px;
+    @keyframes myAnimation {
+        0% {
+            transform: rotate(0deg);
         }
-
-        .header h7{ 
-            margin-top: auto;
-            margin-left: auto;
-            margin-right: auto;
-            align-items: center;
-            padding: 18px;
-
+        100% {
+            transform: rotate(360deg);
         }
+    }
 </style>
-<h1><center>AGENDA101</center></h1>
+
 </br>
 <div style="text-align: center;">
     <a href="https://postimg.cc/VS21zx24">
