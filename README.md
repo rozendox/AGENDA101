@@ -3,7 +3,7 @@
 </br>
 <div style="text-align: center;">
     <a href="https://postimg.cc/VS21zx24">
-        <img src="https://i.postimg.cc/0QyN0xng/52140d88-e193-432c-a911-bc554ff52c4b.jpg" alt="Imagem Redimensionada" style="width: 400px; height: auto;">
+        <img src="https://i.postimg.cc/0QyN0xng/52140d88-e193-432c-a911-bc554ff52c4b.jpg" alt="Imagem Redimensionada" style="width: 700px; height: auto;">
     </a>
 </div>
 
