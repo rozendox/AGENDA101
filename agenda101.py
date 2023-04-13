@@ -68,8 +68,16 @@ PROGRAMAS.
     O projeto foi criado com o intuito de organizar horarios em dias de semana de segunda a sábado.
     Após inicar o projeto com a seguinte imagem: https://postlmg.cc/DSxnwNjK
 
-
-
+    FIXME: 13/04
+    FIXME: PROPOSTA DE IMPLEMENTAÇÃO E MUDANÇA DO PROJETO BASE
+        O PROJETO BASEADO EM FUNÇÕES BASEADAS EM ABERTURA, BUSCA E FECHAMENTO DE BANCO DE DADOS,
+        DEVERÁ POSSAR POR UMA MUDANÇA DE LÓGICA-
+            ABERTURA DE FORMULÁRIOS JSON-
+                ONDE UMA PÁGINA ESPECÍFICA HTML POSSA FAZER ESSAS REQUISIÇÕES E O PYTHON SE TORNARÁ O BACK-END
+                    ESCOLHI FAZER-LO COM FLASK.
+                        DENTRO DO FLASK EXISTE O JSONIFY E REQUEST.
+                            ESSENCIALS PARA REALIZAR A ROTA DE RECEBIMENTO DE DADOS.
+                                IREMOS REALIZAR OS ESTUDOS NECESSÁRIOS PARA IMPLEMENTAÇÃO DO MESMO.
 # -----------------------------------------------------------------
 # ---------------AREA DE ERROS, PROBLEMAS E SOLUÇÕES---------------
 # -----------------------------------------------------------------
@@ -83,20 +91,24 @@ PROGRAMAS.
                     IMPLEMENTED: mudança no código, criação de nota através de constraint's
                                  Ao criar tabelas o usuario escolhe qual tabela referenciar a nota
                                  SEGUNDA À SABADO
-
-
+                                -
+                                -
             NOTA NÃO ESTÁ FUNCIONANDO A CRIAÇÃO--
                 fixed. 11/04/23
             CRIAR TABELAS NÃO ESTÁ FUNCIONANDO--
-
+                                -
             QUANDO PUXO PARA VER A AGENDA NÃO RETORNA, E DÁ ERRO--
                 fixed. 07/04/23
-            DUAS TABELAS ESTÃO COM A TIPAGEM ERRADA--
+            DUAS TABELAS ESTÃO COM A TIPAGEM ERRADA-- SEGUNDA E TERÇA MATERIA 2 = INT DEVERIA SER TEXT
                 fixed. 10/04/23
+                    Ambas tabelas tiveram a tipagem da coluna materia2 corrigida.
             CODIGO DE MUDANÇA DE TIPO DA COLUNA GERANDO ERRO NA SINTAXE --(NEAR TO MODIFY)--
-
+                    fixme:
+                        MELHORAR A PROPOSTA DE MUDANÇA DE COLUNA. PERGUNTAR AO USUARIO QUE TIPO DE DADO ELE VAI
+                        ENTRAR NA COLUNA, E USAR O METODO FORMAT PARA ADICIONAR NO CODIGO
+                        =
             TABELA CRIAÇÃO DE NOTA FOI FEITA, MAS NÃO EXISTE A TABELA INSERÇÃO DE CONTEÚDO--
-
+                             
                 # fixme: Possível solução:
                     a criação pode ser feita através de um menu de escolha depois de criar a tabela desejada
                     ou através do laço de repetição
@@ -110,8 +122,8 @@ PROGRAMAS.
 
 
 
-
-    # FIXME: == RESPOSTA DO CHAT GPT SOBRE PROBLEMAS EM CIMA DO CÓDIGO ATUAL==
+    FIXME: DESATUALIZADO.
+    FIXME: == RESPOSTA DO CHAT GPT SOBRE PROBLEMAS EM CIMA DO CÓDIGO ATUAL==
 
     Existem alguns problemas de segurança no código que devem ser abordados:
 
@@ -135,8 +147,9 @@ PROGRAMAS.
         Além disso, algumas práticas recomendadas de codificação não são seguidas,
         como o uso de nomes de variáveis descritivos e o comentário adequado do código.
         É importante seguir essas práticas para tornar o código mais legível e fácil de manter.
-
-    # FIXME: == AREA DE PROPOSTAS DO CHAT GPT ==
+    
+        FIXME: DESATUALIZADO
+        FIXME: == AREA DE PROPOSTAS DO CHAT GPT ==
 
         1.Use consultas preparadas ou escape as entradas do usuário ao criar consultas SQL.
         Isso ajudará a evitar ataques de injeção de SQL.
@@ -177,6 +190,7 @@ PROGRAMAS.
 
 
         6.Implementar no código uma api para envio de mensagem no what's
+            fixme:implemented. 11/04/2023
 
         7.Pra isso funcioar precisamos instanciar o codigo dentro de um servidor (PODE SER tecnologia CONTAINER ou
         DOCKER)
@@ -223,11 +237,19 @@ PROGRAMAS.
 
 """
 
+# -------------------------------------------------------------------
+# ----IMPORTAÇÃO DAS BIBLIOTECAS ------------------------------------
+# -------------------------------------------------------------------
+
+
+from twilio.rest import Client
 import sqlite3
 
 
-# -----------------------------------------------------------------
-# CRIANDO AS TABELAS SQL
+# -------------------------------------------------------------------
+# CRIANDO AS TABELAS SQL ------- ------------------------------------
+# -------------------------------------------------------------------
+
 
 # $TABELA SEGUNDA FEIRA
 # conn.execute('''CREATE TABLE SEGUNDA
@@ -1001,6 +1023,99 @@ def alterar_tipo_coluna():
 
 
 # ----------------------------------------------------------------------
+# ------------------------ ÁREA DO WHATSAPP API ------------------------
+# ----------------------------------------------------------------------
+
+# Conectar-se ao banco de dados
+
+def wpp_segunda():
+    try:
+
+        # Conectar ao banco de dados SQLite
+        conn = sqlite3.connect('agenda.db')
+        cursor = conn.cursor()
+
+        # Executar a busca (SELECT) dos dados da tabela
+        cursor.execute('SELECT HORARIO1, MATERIA1, HORARIO2, MATERIA2 FROM SEGUNDA')
+        resultado = cursor.fetchone()  # Recuperar o primeiro registro encontrado
+
+        account_sid = 'AC753be7e4dda59387dc6b6b6cf2de74f0'
+        auth_token = '805fb5e029e18a07468372367c65cdf8'
+        client = Client(account_sid, auth_token)
+
+        # Verificar se a busca retornou resultados
+        if resultado:
+            # Recuperar os dados da tabela
+            horario1 = resultado[0]
+            materia1 = resultado[1]
+            horario2 = resultado[2]
+            materia2 = resultado[3]
+
+            # Formatar o corpo da mensagem com os dados da tabela
+            body = f"\t Olá Rozendo, Seu horário de segunda é:\n " \
+                   f"Horário 1: {horario1}\nMatéria 1: {materia1}\nHorário 2: {horario2}\nMatéria 2: {materia2}"
+
+            # Enviar a mensagem com as informações da tabela
+            client = Client(account_sid, auth_token)
+            message = client.messages.create(
+                from_='whatsapp:+14155238886',
+                body=body,
+                to='whatsapp:+556696672283'
+            )
+            print(message.sid)
+            # Fechar a conexão com o banco de dados
+            cursor.close()
+            conn.close()
+        else:
+            print("Nenhum dado encontrado na tabela.")  # Exibir mensagem se não houver resultados
+    except Exception as e:
+        print("Ocorreu um erro ao enviar a mensagem de lembrete: {}".format(e))
+
+
+def wpp_terca():
+    try:
+
+        # Conectar ao banco de dados SQLite
+        conn = sqlite3.connect('agenda.db')
+        cursor = conn.cursor()
+
+        # Executar a busca (SELECT) dos dados da tabela
+        cursor.execute('SELECT HORARIO1, MATERIA1, HORARIO2, MATERIA2 FROM TERCA')
+        resultado = cursor.fetchone()  # Recuperar o primeiro registro encontrado
+
+        account_sid = 'AC753be7e4dda59387dc6b6b6cf2de74f0'
+        auth_token = '805fb5e029e18a07468372367c65cdf8'
+        client = Client(account_sid, auth_token)
+
+        # Verificar se a busca retornou resultados
+        if resultado:
+            # Recuperar os dados da tabela
+            horario1 = resultado[0]
+            materia1 = resultado[1]
+            horario2 = resultado[2]
+            materia2 = resultado[3]
+
+            # Formatar o corpo da mensagem com os dados da tabela
+            body = f"Horário 1: {horario1}\nMatéria 1: {materia1}\nHorário 2: {horario2}\nMatéria 2: {materia2}"
+
+            # Enviar a mensagem com as informações da tabela
+            client = Client(account_sid, auth_token)
+            message = client.messages.create(
+                from_='whatsapp:+14155238886',
+                body=body,
+                to='whatsapp:+556696672283'
+            )
+            print(message.sid)
+            # Fechar a conexão com o banco de dados
+            cursor.close()
+            conn.close()
+        else:
+            print("Nenhum dado encontrado na tabela.")  # Exibir mensagem se não houver resultados
+    except Exception as e:
+        print("Ocorreu um erro ao enviar a mensagem de lembrete: {}".format(e))
+
+
+# ----------------------------------------------------------------------
 # --------------------------- MENU PRINCIPAL ---------------------------
 # ----------------------------------------------------------------------
 
@@ -1039,9 +1154,11 @@ def menu_principal():
             if entrada.lower() == 'segunda':
                 print('\nSUA AGENDA DE SEGUNDA FEIRA É:\n')
                 print(verSEG() + "\n")
+                wpp_segunda()
                 decisao_sair()
             elif entrada.lower() == 'terca':
                 print(verTER() + "\n")
+                wpp_terca()
                 decisao_sair()
             elif entrada.lower() == "quarta":
                 print(verQUA())
@@ -1072,6 +1189,7 @@ def menu_principal():
             if decisao_MOD.lower() == 'segunda':
                 updateSEG()
                 decisao_sair()
+                wpp_segunda()
             elif decisao_MOD.lower() == 'terca':
                 updateTER()
                 decisao_sair()
@@ -1150,3 +1268,4 @@ def menu_principal():
 
 
 menu_principal()
+
