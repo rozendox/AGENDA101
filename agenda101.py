@@ -1040,7 +1040,7 @@ def wpp_segunda():
         resultado = cursor.fetchone()  # Recuperar o primeiro registro encontrado
 
         account_sid = 'AC753be7e4dda59387dc6b6b6cf2de74f0'
-        auth_token = '805fb5e029e18a07468372367c65cdf8'
+        auth_token = '**********************************'
         client = Client(account_sid, auth_token)
 
         # Verificar se a busca retornou resultados
