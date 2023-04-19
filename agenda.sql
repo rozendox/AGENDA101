@@ -91,3 +91,5 @@ create table terça
     CONTEUDO TEXT not null
 );
 
+
+
